@@ -1,19 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const UsuarioA = require('../models/UsuarioA');
-const UsuarioB = require('../models/UsuarioB');
 
 // Ruta para manejar el inicio de sesión
 router.post('/', async (req, res) => {
   try {
     const { usuario, password, tipoUsuario } = req.body;
+    const db = req.app.locals.db; // Obtener la referencia a la base de datos desde las locales de la aplicación
 
     // Buscar al usuario en la base de datos según el tipo de usuario
     let user;
     if (tipoUsuario === 'Usuario A') {
-      user = await UsuarioA.findOne({ usuario, password });
+      user = await db.collection('usuariosa').findOne({ usuario, password });
     } else if (tipoUsuario === 'Usuario B') {
-      user = await UsuarioB.findOne({ usuario, password });
+      user = await db.collection('usuariosb').findOne({ usuario, password });
     }
 
     if (!user) {

@@ -1,20 +1,23 @@
 const express = require('express');
-const connectDB = require('./config/database');
-const loginRouter = require('./routes/Login');
-const usuarioARoutes = require('./routes/usuarioA');
-const usuarioBRoutes = require('./routes/usuarioB');
+const { MongoClient } = require('mongodb');
 
 const app = express();
 
-// Conectar a la base de datos
-connectDB();
+// Middleware y configuración de rutas
+// ...
 
-// Middleware
-app.use(express.json());
+// Conexión a la base de datos
+let db;
 
-// Rutas
-app.use('/api/login', loginRouter);
-app.use('/api/usuarioA', usuarioARoutes);
-app.use('/api/usuarioB', usuarioBRoutes);
+MongoClient.connect('mongodb+srv://maxiballadares:e1LVU3r9OQSzB6Ay@laapp.n6ddtu1.mongodb.net/', { useUnifiedTopology: true })
+  .then(client => {
+    console.log('Conexión exitosa a la base de datos');
+    db = client.db('dataLaApp');
+    app.locals.db = db; // Guardar la referencia a la base de datos en las locales de la aplicación
+  })
+  .catch(err => {
+    console.error('Error al conectar a la base de datos:', err);
+    process.exit(1);
+  });
 
 module.exports = app;
