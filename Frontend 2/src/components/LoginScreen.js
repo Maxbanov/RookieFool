@@ -16,13 +16,18 @@ const LoginScreen = () => {
         tipoUsuario,
       };
       const response = await loginUsuario(data);
-      console.log('Inicio de sesión exitoso');
-      // Redirigir al usuario según el tipo seleccionado
-      if (tipoUsuario === 'Usuario A') {
-        navigate('/usuarioA');
-      } else if (tipoUsuario === 'Usuario B') {
-        navigate('/usuarioB');
-      } 
+      
+      if (response.status === 200) {
+        console.log('Inicio de sesión exitoso');
+        // Redirigir al usuario según el tipo seleccionado
+        if (tipoUsuario === 'Usuario A') {
+          navigate('/usuarioA');
+        } else if (tipoUsuario === 'Usuario B') {
+          navigate('/usuarioB');
+        }
+      } else {
+        console.error('Error al iniciar sesión');
+      }
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
     }
